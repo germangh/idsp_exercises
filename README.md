@@ -9,7 +9,7 @@ I don't see any problem in making them even more widely available. As far as I k
 author of all the materials in this repository. That also means that I am the only responsible for any
  typos or mistakes. If you find any, please let [me](mailto:g@germangh.com) know!
 
-The official course textbooks:
+The official course textbooks on year 2009 were:
 
 * Sanjit Mitra, [Digital Signal Processing: A Computer-Based Approach][book1], 3rd edition, McGraw Hill, 2005. 
 * Steven W. Smith, [The Scientist and Engineer's Guide to Digital Signal Processing][book2], 1998.
