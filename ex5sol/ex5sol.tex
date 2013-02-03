@@ -1,0 +1,712 @@
+\documentclass[a4paper,11pt,oneside]{article}
+
+\usepackage{amsmath,amssymb,epsfig}
+\usepackage[T1]{fontenc}
+\usepackage{ae,aecompl}
+\usepackage{url}
+\usepackage{subfigure}
+\addtolength{\voffset}{-1cm}
+\addtolength{\hoffset}{-1cm}
+\setlength{\parindent}{0in}
+\addtolength{\textwidth}{1.8cm}
+\addtolength{\textheight}{1cm}
+\addtolength{\parskip}{.5cm}
+
+% Example definitions.
+% --------------------
+\def\x{{\mathbf x}}
+\def\X{{\mathbf X}}
+\def\u{{\mathbf u}}
+\def\U{{\mathbf U}}
+\def\x{{\mathbf x}}
+\def\s{{\mathbf s}}
+\def\A{{\mathbf A}}
+\def\y{{\mathbf y}}
+\def\W{{\mathbf W}}
+\def\w{{\mathbf w}}
+\def\B{{\mathbf B}}
+\def\a{{\mathbf a}}
+\def\D{{\mathbf D}}
+\def\P{{\mathbf P}}
+\def\n{{\mathbf n}}
+\def\V{{\mathbf V}}
+\def\R{{\mathbf R}}
+\def\I{{\mathbf I}}
+\def\M{{\mathbf M}}
+\def\sech{{\mathrm{sech}}}
+\def\L{{\cal L}}
+\def\Cum{{\rm{Cum}}}
+\def\var{{\rm{var}}}
+\def\T{{\mathbf T}}
+\def\C{{\mathbf C}}
+\def\tf{{\emph{t-f}}}
+
+
+% Title.
+% ------
+\title{\large{\textbf{EXERCISE 5 - SOLUTIONS}}}
+\author{SGN-1156 Signal Processing Techniques\\
+\url{http://www.cs.tut.fi/courses/SGN-1156}\\
+Tampere University of Technology\\
+Germ\'an G\'omez-Herrero, \url{http://germangh.com}}
+\date{December 3, 2009}
+
+
+\begin{document}
+\maketitle
+
+
+%\vspace{1cm}
+
+
+% ****************************************************************
+
+
+\noindent \textbf{PROBLEM 1:} Given:
+
+\[ 
+X(z)=\frac{2-\frac{9}{4}z^{-1}-\frac{5}{2}z^{-2}+\frac{59}{16}z^{-3}-\frac{3}{2}z^{-4}+\frac{3}{16}z^{-5}}{1-\frac{5}{4}z^{-1}+\frac{1}{2}z^{-2}-\frac{1}{16}z^{-3}}
+\]
+
+having a ROC $\frac{1}{2}>|z|>\frac{1}{4}$, find the inverse Z transform (Hint: $X(\frac{1}{4})=\infty$).
+
+\vspace{1cm}
+
+% ****************************************************************
+
+\textbf{SOLUTION:}
+
+\emph{NOTE: If during the exam you have to invert a rational Z-transform having as denominator a polynomial in $z^{-1}$ of order $N>2$ (like in this case) you will have as hint the value of at least $N-2$ poles. The reason is that finding the roots of a polynomial of order greater than 2 can be quite tricky without the help of MATLAB or a similar mathematical software.}
+
+In order to invert the given Z-transform we have to manipulate the expression of $X(z)$ so that it becomes a linear combination of terms like those in Table~\ref{commonz}.
+
+\begin{table}
+\centering
+\begin{tabular}{ccc}
+\hline
+Sequence & Z-transform & ROC\\
+\hline
+$\delta[n]$ & 1 & $\forall z$\vspace{.2cm}\\
+$\alpha^n\mu[n]$ &  $\frac{1}{1-\alpha z^{-1}}$ & $|z|>|\alpha|$\vspace{.2cm}\\
+$-(\alpha)^{n}\mu[-n-1]$ & $\frac{1}{1-\alpha z^{-1}}$ & $|z|<|\alpha|$\vspace{.2cm}\\
+$n \alpha^n \mu[n]$ & $\frac{\alpha z^{-1}}{(1-\alpha z^{-1})^2}$ & $|z|>|\alpha|$\vspace{.2cm}\\
+$-n\alpha^n \mu[-n-1]$ & $\frac{\alpha z^{-1}}{(1-\alpha z^{-1})^2}$ & $|z|<|\alpha|$\vspace{.2cm}\\
+\hline
+\end{tabular}
+\caption{Common Z-transform pairs.}
+\label{commonz}
+\end{table}
+
+Because the order of the denominator $N=3$ is not greater than the order of the numerator ($M=5$) the first thing that we could do is to express $X(z)$ as:
+
+\begin{equation}\label{longdivision}
+X(z)=\frac{B(z)}{A(z)}=Q(z)+\frac{R(z)}{A(z)}
+\end{equation} 
+
+where $Q(z)$ is the \emph{quotient} and $R(z)$ the \emph{remainder} of the long division of $B(z)$ into $A(z)$. An alternative possibility to using long division would be to denote $G(z)=\frac{1}{A(z)}$ and express $X(z)$ as:
+
+\[
+X(z) = 2G(z)-\frac{9}{4}z^{-1}G(z)-\frac{5}{2}z^{-2}G(z)+\frac{59}{16}z^{-3} G(z)-\frac{3}{2}z^{-4}G(z)+\frac{3}{16}z^{-5}G(z)
+\]
+
+and then using the linearity and shifting property of the Z-transform we could express the inverse Z-transform of $X(z)$ in terms of the inverse Z-transform of $G(z)$, denoted below by $g[n]$:
+
+\[
+x[n] = 2g[n]-\frac{9}{4}g[n-1]-\frac{5}{2}g[n-2]+\frac{59}{16}g[n-3]-\frac{3}{2}g[n-4]+\frac{3}{16}g[n-5]
+\]
+
+Since $G(z)$ is a fraction that has a greater polynomial degree in the denominator than in the numerator it can be inverted using the method of the residuals. In our case, using the linearity and shifting properties will produce a very long and ugly expression of the sequence $x[n]$. Because of this, we prefer performing the long division of $B(z)$ into $A(z)$:
+
+\begin{tabular}{r|cllllll}
+&\qquad&$-3z^{-2}$&$+1$&&&&\\
+\cline{2-8}
+\\
+$-\frac{1}{16}z^{-3}+\frac{1}{2}z^{-2}-\frac{5}{4}z^{-1}+1$&&$\frac{3}{16}z^{-5}$&$-\frac{3}{2}z^{-4}$&$+\frac{59}{16}z^{-3}$&$-\frac{5}{2}z^{-2}$&$-\frac{9}{4}z^{-1}$&$+2$\\
+&&$\frac{3}{16}z^{-5}$&$-\frac{3}{2}z^{-4}$&$+\frac{15}{4}z^{-3}$&$-3z^{-2}$&&\\
+\cline{3-8}
+&&&&$-\frac{1}{16}z^{-3}$&$+\frac{1}{2}z^{-2}$&$-\frac{9}{4}z^{-1}$&$+2$\\
+&&&&$-\frac{1}{16}z^{-3}$&$+\frac{1}{2}z^{-2}$&$-\frac{5}{4}z^{-1}$&$+1$\\
+\cline{5-8}
+&&&&&&$-z^{-1}$&$+1$\\
+\end{tabular}
+
+So we obtained that:
+
+\[
+\begin{array}{lll}
+Q(z)&=&1-3z^{-2}\\
+R(z)&=&1-z^{-1}\\
+\end{array}
+\]
+
+and then using Eq.~\ref{longdivision}:
+
+\begin{equation}\label{eq2}
+X(z)=\underbrace{1-3z^{-2}}_{Q(z)}+\underbrace{\frac{1-z^{-1}}{1-\frac{5}{4}z^{-1}+\frac{1}{2}z^{-2}-\frac{1}{16}z^{-3}}}_{P(z)=\frac{B(z)}{A(z)}}
+\end{equation}
+
+the rational function $P(z)$ is called a \emph{proper fraction} because the order of the denominator is greater than the order of the numerator. The term $Q(z)$ is already directly invertible (using the shifting property of the Z-transform):
+
+\[
+q[n]=Z^{-1}\left\{Q(z)\right\}=Z^{-1}\left\{1-3z^{-2}\right\}=\delta[n]-3\delta[n-2]
+\]
+
+The fraction $P(z)$ has to be further manipulated using fractional expansion which first requires that we compute the poles of $Q(z)$. The poles of $Q(z)$ are just the values of $z$ that make $Q(z)$ equal to infinity, which are the same as the values of $z$ that make the denominator $A(z)$ equal to zero. Because $A(z)$ is a third order polynomial, it could be complicated to find its three roots without a computer. However, we can use the hint given in the problem description that says that $p_1=\frac{1}{4}$ is one of those three roots. This means that:
+
+\[
+A(z)=(1-p_{1}z^{-1})(1-p_{2}z^{-1})(1-p_{3}z^{-1})\Rightarrow (1-p_{2}z^{-1})(1-p_{3}z^{-1})=\frac{A(z)}{1-p_1z^{-1}}
+\]
+
+So we use long division to obtain the result of dividing $A(z)$ by $(1-\frac{1}{4}z^{-1})$:
+
+\begin{tabular}{r|cllllll}
+&\qquad&$\frac{1}{4}z^{-2}$&$-z^{-1}$&$+1$&&&\\
+\cline{2-8}
+\\
+$-\frac{1}{4}z^{-1}+1$&&$-\frac{1}{16}z^{-3}$&$+\frac{1}{2}z^{-2}$&$-\frac{5}{4}z^{-1}$&$+1$&&\\
+&&$-\frac{1}{16}z^{-3}$&$+\frac{1}{4}z^{-2}$&&&&\\
+\cline{3-8}
+&&&$\frac{1}{4}z^{-2}$&$-\frac{5}{4}z^{-1}$&$+1$&&\\
+&&&$\frac{1}{4}z^{-2}$&$-z^{-1}$&$+1$&&\\
+\cline{4-8}
+&&&&$-\frac{1}{4}z^{-1}$&$+1$&&\\
+&&&&$-\frac{1}{4}z^{-1}$&$+1$&&\\
+\cline{5-8}
+&&&&&$0$&&\\
+\end{tabular}
+
+As expected, the remainder of the division is zero and we can write that:
+
+\[
+\frac{A(z)}{1-p_1z^{-1}}=(1-p_{2}z^{-1})(1-p_{3}z^{-1})=\frac{1}{4}z^{-2}-z^{-1}+1
+\]
+
+So $p_1$ and $p_2$ can be easily obtained by finding the roots of the second order polynomial $\frac{1}{4}z^{-2}-z^{-1}+1$, which happen to be: $p_2=p_3=\frac{1}{2}$. Now we can rewrite the term $P(z)$ in Eq.~\ref{eq2} as:
+
+\[
+P(z)=\frac{1-z^{-1}}{1-\frac{5}{4}z^{-1}+\frac{1}{2}z^{-2}-\frac{1}{16}z^{-3}}=\frac{1-z^{-1}}{(1-\frac{1}{2}z^{-1})^2(1-\frac{1}{4}z^{-1})}
+\]
+
+When we get an expression like the one above we say that we have two poles. One of them is simple ($p_1=\frac{1}{4}$) and the other is multiple ($p_{2}=\frac{1}{2}$) with multiplicity equal to 2. Now can use the method of the residuals to rewrite $P(z)$ as:
+
+\begin{equation}\label{fractionalexp}
+P(z)=\frac{a}{(1-\frac{1}{4}z^{-1})}+\frac{b_1}{(1-\frac{1}{2}z^{-1})}+\frac{b_2}{(1-\frac{1}{2}z^{-1})^2}
+\end{equation}
+
+where $a$ is the residual corresponding to the single pole $p_1=\frac{1}{4}$ and therefore is obtained with the formula:
+
+\[
+a = \left.\left[(1-p_1z^{-1})P(z)\right]\right|_{z=p_1}=\left.\frac{1-z^{-1}}{(1-\frac{1}{2}z^{-1})^2}\right|_{z=\frac{1}{4}}=-3
+\]
+
+while the residuals $b_{1}$ and $b_{2}$ correspond to the pole $p_2=\frac{1}{2}$ with multiplicity $L=2$ and, therefore, have to be obtained using the following formula:
+
+\[
+b_{i} = \frac{1}{(L-i)!(-p)^{L-i}}\left[\frac{d^{L-i}}{d(z^{-1})^{L-i}}\left[(1-p_iz^{-1})^LP(z)\right]\right]_{z=p}
+\]
+
+where $p$ is the value of the pole, $L$ is the multiplicity and $\frac{d^k}{d(z^{-1})^k}$ denotes derivative of order $k$ with respect to variable $z^{-1}$. So, in our case we have that:
+
+\[
+b_2=\left[(1-p_2)^2P(z)\right]_{z=p_2}=\left[\frac{1-z^{-1}}{1-\frac{1}{4}z^{-1}}\right]_{z=\frac{1}{2}}=-2
+\]
+
+\[
+b_1=\frac{1}{(-\frac{1}{2})}\left[\frac{d}{d(z^{-1})}\left[(1-p_2)^2P(z)\right]\right]_{z=p_2}=-2\left[\frac{-1}{1-\frac{1}{4}z^{-1}}+\frac{1-z^{-1}}{4(1-\frac{1}{4}z^{-1})^2}\right]_{z=\frac{1}{2}}=6
+\]
+
+So using the fractional expansion of $P(z)$ in Eq.~\ref{fractionalexp} we can write Eq.~\ref{eq2} as:
+
+
+\begin{equation}\label{lasteq}
+X(z)=1-3z^{-2}-\frac{3}{(1-\frac{1}{4}z^{-1})}+\frac{6}{(1-\frac{1}{2}z^{-1})}-\frac{2}{(1-\frac{1}{2}z^{-1})^2}
+\end{equation}
+
+Now X(z) can be directly inverted using the properties of the Z-transform and the elementary Z-transform pairs in Table~\ref{commonz}. First:
+
+\[
+\textrm{Z}^{\textrm{inv}}\left\{1-3z^{2}\right\}=\delta[n]-3\delta[n-3]\\
+\]
+
+where $\textrm{Z}^{\textrm{inv}}$ denotes inverse Z transform. Then, because the ROC of X(z) is lower-bounded by the pole $p_1=\frac{1}{4}$ the inverse of the following term must be a causal sequence:
+
+\[
+\textrm{Z}^{\textrm{inv}}\left\{\frac{-3}{(1-\frac{1}{4}z^{-1})}\right\}=-3\left(\frac{1}{4}\right)^n\mu[n]
+\]
+
+By contrary, the double pole $p_2=\frac{1}{2}$ defines the upper bound of the ROC which means that the inverse of the last two terms in Eq.~\ref{lasteq} must be an anticausal sequence:
+
+\[
+\textrm{Z}^{\textrm{inv}}\left\{\frac{6}{(1-\frac{1}{2}z^{-1})}\right\}=-6\left(\frac{1}{2}\right)^n\mu[-n-1]
+\]
+
+and by the shifting property of the Z-transform we have that:
+
+\[
+\textrm{Z}^{\textrm{inv}}\left\{\frac{-2}{(1-\frac{1}{2}z^{-1})^2}\right\}=-4 z\cdot \textrm{Z}^{\textrm{inv}}\left\{\underbrace{\frac{\frac{1}{2}z^{-1}}{(1-\frac{1}{2}z^{-1})^2}}_{V(z)}\right\}=-4v[n+1]
+\]
+
+where:
+
+\[
+v[n] =  \textrm{Z}^{\textrm{inv}}\left\{\frac{\frac{1}{2}z^{-1}}{(1-\frac{1}{2}z^{-1})^2}\right\}=-n\left(\frac{1}{2}\right)^n\mu[-n-1]
+\]
+
+so then:
+
+\[
+\textrm{Z}^{\textrm{inv}}\left\{\frac{-2}{(1-\frac{1}{2}z^{-1})^2}\right\}=-4v[n+1]=4(n+1)\left(\frac{1}{2}\right)^{(n+1)}\mu[-n-2]
+\]
+
+and putting all the terms together we reach the result:
+
+\[
+x[n] =\delta[n]-3\delta[n-3]-3\left(\frac{1}{4}\right)^n\mu[n]-6\left(\frac{1}{2}\right)^n\mu[-n-1]+2(n+1)\left(\frac{1}{2}\right)^{n}\mu[-n-2]
+\]
+
+\vspace{1cm}
+% ****************************************************************
+
+\noindent \textbf{PROBLEM 2:} Given the following system function of a causal LTI system:
+
+\begin{equation}\label{eq:systemfunction}
+H(z)=\frac{z^{-3}}{(1-2z^{-3})(1-0.5z^{-1})}
+\end{equation}
+
+find the impulse response of the system.
+\vspace{1cm}
+
+% ****************************************************************
+
+\textbf{SOLUTION:}
+
+
+The denominator of $H(z)$ is a fourth order polynomial, which means that it will have four roots, i.e. our system function has four poles. Obvioulsy, one pole is located in $p_1=0.5$. The poles $p_2$, $p_3$ and $p_4$ are the roots of the polynomial $(1-2z^{-3})$. Finding the roots of third order polynomial can be tricky but in this case, we can easily find one of its roots (that is pole $p_2$):
+
+\[
+1-2z^{-3} = 0 \Rightarrow z^{-3}=\frac{1}{2}  \Rightarrow p_{2}=(2)^{\frac{1}{3}}=\sqrt[3]{2}
+\]
+
+and therefore, we can factorize the term $1-2z^{-3}$ as:
+
+\[
+(1-2z^{-3})=(1-\sqrt[3]{2}z^{-1})Q(z)
+\]
+
+where $Q(z)=\frac{(1-2z^{-3})}{(1-\sqrt[3]{2}z^{-1})}$ must be a second-order polynomial. In order to find $Q(z)$ we use long division:
+
+\begin{tabular}{r|cllll}
+&\qquad& $\sqrt[3]{4}z^{-2}$ & $+\sqrt[3]{2}z^{-1}$ & $+1$&\\
+\cline{2-6}
+\\
+$-\sqrt[3]{2}z^{-1}+1$ && $-2z^{-3}$ & $+0z^{-2}$&$+0z^{-1}$&$+1$\\
+&& $-2z^{-3}$ & $+\sqrt[3]{4}z^{-2}$&&\\
+\cline{3-6}\\
+&&&$-\sqrt[3]{4}z^{-2}$&$+0z^{-1}$&$+1$\\
+&&&$-\sqrt[3]{4}z^{-2}$&$+\sqrt[3]{2}z^{-1}$&\\
+\cline{4-6}\\
+&&&&$-\sqrt[3]{2}z^{-1}$&$+1$\\
+&&&&$-\sqrt[3]{2}z^{-1}$&$+1$\\
+\cline{5-6}\\
+&&&&&$0$\\
+\end{tabular}
+
+As expected, the remainder of the division is zero and $Q(z)=\sqrt[3]{4}z^{-2}+\sqrt[3]{2}z^{-1}+1$ is a second degree polynomial. Now, we can easily find the two roots of $Q(z)$, which will correspond to the two remaining poles $p_3$ and $p_4$. By making the variable change $x=z^{-1}$ we find that:
+
+\[
+\sqrt[3]{4}x^{2}+\sqrt[3]{2}x+1=0 \Rightarrow x = \frac{-\sqrt[3]{2}\pm j\sqrt{3}\sqrt[6]{4}}{2\sqrt[3]{4}}
+\]
+
+and then by reversing the variable change ($z=x^{-1}$) we obtain that the two poles that we were looking for are:
+
+\[
+\begin{array}{lllll}
+p_3&=& \frac{2\sqrt[3]{4}}{-\sqrt[3]{2}+ j\sqrt{3}\sqrt[6]{4}}=-0.63-1.09j\\
+p_4&=& \frac{2\sqrt[3]{4}}{-\sqrt[3]{2}- j\sqrt{3}\sqrt[6]{4}}=-0.63+1.09j\\
+\end{array}
+\]
+
+Always, when a fractional Z-transform has complex poles they will be in conjugate pairs, i.e. $p_4=p_3^*$ in this case. So we can write the system function in Eq.~\ref{eq:systemfunction} as:
+
+\[
+H(z)=\frac{z^{-3}}{(1-p_1z^{-1})(1-p_2z^{-1})(1-p_3z^{-1})(1-p_3^*z^{-1})} \qquad ROC \equiv |z|>\sqrt[3]{2}
+\]
+
+Because the system is causal, the ROC of $H(z)$ must be the region outside the circunference in which the largest (in absolute value) pole is located. Now, using fractional expansion:
+
+\[
+H(z) =  \frac{A}{1-p_1z^{-1}}+\frac{B}{1-p_2z^{-1}}+\frac{C}{1-p_3z^{-1}}+\frac{C^*}{1-p_3^*z^{-1}}
+\]
+
+where $p_1=0.5$, $p_2=\sqrt[3]{2}=1.26$ and $p_3=-0.63-1.09j$ and the residuals are:
+
+\begin{equation}
+\begin{array}{lllll}
+A &=& \left.\left[(1-p_1z^{-1})H(z)\right]\right|_{z=p_1}&=&-0.53\\
+B &=& \left.\left[(1-p_2z^{-1})H(z)\right]\right|_{z=p_2}&=&0.28\\
+C &=& \left.\left[(1-p_3z^{-1})H(z)\right]\right|_{z=p_3}&=&0.13+0.04j\\
+\end{array}
+\end{equation}
+
+Now we can finally invert $H(z)$ taking into account that all the poles correspond to causal components of the system:
+
+\begin{equation}\label{impulse}
+h[n] = A(p_1)^n\mu[n]+B(p_2)^n\mu[n]+C(p_3)^n\mu[n]+C^*(p_3^*)^n\mu[n]
+\end{equation}
+
+
+Exercise: try to express the equation above using only real terms. You can do it by writting $C$ and $p_3$ in polar form.
+
+
+\vspace{1cm}
+
+% ****************************************************************
+
+\noindent \textbf{PROBLEM 3:} Given the following system function of a causal system:
+
+\begin{equation}\label{eq:Yz}
+H(z)=\frac{-5-3z+2z^{-1}}{1-2z^{-1}} \qquad \textrm{ROC}\equiv |z|>2 
+\end{equation}
+
+Find the impulse response $h[n]$ of the system.
+
+
+\vspace{1cm}
+% ****************************************************************
+
+\textbf{SOLUTION:}
+
+Although the numerator of $H(z)$ is a polynomial of greater degree than the denominator you do not need to perform long division. You should notice that this Z-transform is already directly invertible using the shifting property of the Z-transform (without needing to compute residuals or long division):
+
+\[
+H(z)=-5\underbrace{\frac{1}{1-2z^{-1}}}_{G(z)}-3z\underbrace{\frac{1}{1-2z^{-1}}}_{G(z)}+2z^{-1}\underbrace{\frac{1}{1-2z^{-1}}}_{G(z)}
+\]
+
+So we finally obtain that:
+
+\begin{equation}\label{eq:yn}
+h[n] = -5(2)^n\mu[n]-3(2)^{n+1}\mu[n+1]+2(2)^{n-1}\mu[n-1]
+\end{equation}
+
+
+
+
+\vspace{1cm}
+% ****************************************************************
+\textbf{PROBLEM 4:} Evaluate the convolution of the two sequences $h[n]=(0.5)^n\mu[n]$ and $x[n]=3^n\mu[-n]$ by using the Z-transform.
+
+
+\vspace{1cm}
+
+% ****************************************************************
+\textbf{SOLUTION:}
+
+%\emph{This question is identical to question 4 from the sample exam that was solved in the classroom and that is available in the course web-page.}
+
+Using either the table of elementary Z-transform pairs or applying the formula of the foward Z-transform we obtain that:
+
+\[
+H(z) = \frac{1}{1-0.5z^{-1}} \qquad \textrm{ROC} \;\equiv\; |z|>0.5
+\]
+
+\[
+X(z) = 1 - \frac{1}{1-3z^{-1}} \qquad \textrm{ROC} \;\equiv\; |z|<3
+\]
+
+So the Z-transform of the convolution $y[n]=x[n]\otimes h[n]$ is:
+
+\[
+Y(z)=X(z)H(z)=\frac{1}{1-0.5z^{-1}}-\frac{1}{(1-3z^{-1})(1-0.5z^{-1})} \qquad \textrm{ROC} \;\equiv\; 3>|z|>0.5
+\]
+
+the second fraction above can be expanded using the method of the residuals:
+
+\[
+\frac{1}{(1-3z^{-1})(1-0.5z^{-1})}=\frac{\frac{6}{5}}{1-3z^{-1}}-\frac{\frac{1}{5}}{1-0.5z^{-1}}
+\]
+
+so that we can write:
+
+\[
+Y(z)=\frac{1}{1-0.5z^{-1}}-\frac{\frac{6}{5}}{1-3z^{-1}}+\frac{\frac{1}{5}}{1-0.5z^{-1}}
+\]
+
+which can be directly inverted using the table of elementary Z-transform pairs:
+
+\[
+y[n] = \left(\frac{1}{2}\right)^{n}\mu[n]+\frac{6}{5}\left(3\right)^{n}\mu[-n-1]+\frac{1}{5}\left(\frac{1}{2}\right)^n\mu[n]
+\]
+
+
+%\emph{The expression above is different to the expression that you can find in the solutions of the sample exam that we solved in the classroom. However, you can easily check that the expression there and here are equivalent.}
+
+
+
+
+\vspace{1cm}
+
+% ****************************************************************
+\textbf{PROBLEM 5:} Find the inverse Z-transform of
+
+\[
+X(z) = \frac{1-3z^{-5}}{(1-0.2z^{-1})(1+0.6z^{-1})} \qquad \textrm{ROC}\;\equiv\; 0.2<|z|<0.6
+\]
+
+\vspace{1cm}
+
+% ****************************************************************
+\textbf{SOLUTION:}
+
+Since the order of the numerator is greater that the order of the denominator we cannot apply directly the method of the residuals to $X(z)$. One way of proceeding is to perform a long division but this can be a rather long process. Since the numerator of our Z expression has only two terms the best is to rewrite $X(z)$ as:
+
+\[
+X(z)=\underbrace{\frac{1}{(1-0.2z^{-1})(1+0.6z^{-1})}}_{G(z)}-3z^{-5}\underbrace{\frac{1}{(1-0.2z^{-1})(1+0.6z^{-1})}}_{G(z)}
+\]
+
+and use the linearity and shifting properties of the Z-transform to write:
+
+\[
+x[n] = g[n] - 3g[n-5]
+\]
+
+where $g[n]$ is the inverse Z-transform of $G(z)$. Inverting $G(z)$ is very easy using the method of the residuals:
+
+\[
+G(z) = \frac{1}{(1-0.2z^{-1})(1+0.6z^{-1})}=\frac{\frac{1}{4}}{1-0.2z^{-1}}+\frac{\frac{3}{4}}{1+0.6z^{-1}}
+\]
+
+So we have that:
+
+\[
+g[n]=\frac{1}{4}(0.2)^n \mu[n]-\frac{3}{4}(-0.6)^n\mu[-n-1]
+\]
+
+and then $x[n] = g[n] - 3g[n-5]$.
+
+
+
+
+\vspace{1cm}
+
+
+% ****************************************************************
+\textbf{PROBLEM 6:} Calculate the convolution of the following three sequences using the Z-transform:
+
+\begin{eqnarray}
+x_1[n]&=&2^n\mu[n]\\
+x_2[n]&=&\delta[n]+2\delta[n-1]\\
+x_3[n]&=&\delta[n]-3\delta[n+1]
+\end{eqnarray}
+
+
+\vspace{1cm}
+% ****************************************************************
+\textbf{SOLUTION:}
+
+Because the problem asks to use the Z-transform this means that we have to find the convolution using the following relationship:
+
+\begin{equation}
+y[n]=x_1[n]\otimes x_2[n] \otimes x_3[n] = Z^{-1}\left\{X_1(z)X_2(z)X_3(z)\right\}\\
+\end{equation}
+
+First we compute the Z-transform of the three given sequences. This is a trivial task using the table of Z-transform pairs in the summary of chapter 6:
+
+\begin{equation}
+\begin{array}{llll}
+X_1(z)&=&\frac{1}{1-2z^{-1}} & \textrm{ROC} \equiv |z|>2\\
+X_2(z)&=&1+2z^{-1} & \textrm{ROC} \equiv z\neq 0\\
+X_3(z)&=&1-3z & \textrm{ROC} \equiv z\neq \infty
+\end{array}
+\end{equation}
+
+So we need to invert the following Z-transform:
+
+\begin{equation}
+Y(z)=\frac{(1+2z^{-1})(1-3z)}{1-2z^{-1}}=\frac{-5-3z+2z^{-1}}{(1-2z^{-1})} \qquad \textrm{ROC}\equiv |z|>2 
+\end{equation}
+
+Notice that this Z-transform is already directly invertible using the shifting property of the Z-transform (without needing to compute residuals or long division):
+
+\[
+Y(z)=-5\underbrace{\frac{1}{1-2z^{-1}}}_{G(z)}-3z\underbrace{\frac{1}{1-2z^{-1}}}_{G(z)}+2z^{-1}\underbrace{\frac{1}{1-2z^{-1}}}_{G(z)}
+\]
+
+So we finally obtain that:
+
+\begin{equation}
+y[n] = -5(2)^n\mu[n]-3(2)^{n+1}\mu[n+1]+2(2)^{n-1}\mu[n-1]
+\end{equation}
+
+
+
+
+
+
+
+
+
+\vspace{1cm}
+% ****************************************************************
+\textbf{PROBLEM 7:} Find the region of convergence of the Z-transform of the following sequences:
+
+\begin{itemize}
+\item[(a)] $x_a[n]=\left(\frac{1}{4}\right)^n\mu[n]+\left(\frac{1}{2}\right)^{2n}\mu[-n]$
+\item[(b)] $x_b[n]=\left\{\begin{array}{lll}1 &\quad& -15 \leq n \leq -5\\0 &\quad& \textrm{otherwise} \end{array}\right.$
+\item[(c)] $x_c[n]=2^n\mu[-n-5]$
+\end{itemize}
+
+\vspace{1cm}
+% ****************************************************************
+\textbf{SOLUTION:}
+
+\textbf{(a)}
+
+\[
+x_{a}[n]=\left(\frac{1}{4}\right)^n\mu[n]+\left(\frac{1}{2}\right)^{2n}\mu[-n]=\underbrace{\left(\frac{1}{4}\right)^n\mu[n]}_{\textrm{ROC}\equiv |z|<\frac{1}{4}}+\underbrace{\left(\frac{1}{4}\right)^{n}\mu[-n]}_{\textrm{ROC}\equiv |z|>\frac{1}{4}}
+\]
+
+Obviously, the ROC of the causal and anti-causal components of $x_a[n]$ do not overlap and therefore their intersection is empty. Thus $X_a(z)$ does not converge for any value of $z$, i.e. ROC $\equiv \emptyset$
+
+\textbf{(b)}
+
+Because the sequence $x_b[n]$ is of finite duration its ROC must be all z-plane except possibly $z=0$ or $z=\infty$. Because the sequence is anti-causal its Z-transform will contain only positive powers of $z$ which means that it will converge for $z=0$ but not for $z=\infty$. Thus the ROC of this sequence is the whole z-plane except $z=\infty$.
+
+\textbf{(c)}
+
+Using the formula of the Z-transform:
+
+\[
+X_c(z)=\sum_{n=-\infty}^{\infty}x_c[n]z^{-n}=\sum_{n=-\infty}^{-5}2^nz^{-n}=\sum_{n=5}^{\infty}2^{-n}z^n=\sum_{n=5}^{\infty}(2^{-1}z)^n
+\]
+
+The summatory above will converge only if $|2^{-1}z|<1$ which means that the ROC must be $|z|<2$.
+
+You could have reached the same result using this alternative way:
+
+\[
+x_c[n]=2^n\mu[-n-5]=2^n\mu[-(n+1+4)]=2^{-4}\underbrace{2^{n+4}\mu[-(n+1+4)]}_{-g[n+4]}
+\]
+
+So the z-transform of $x_c[n]$ will be:
+
+\[
+X_c(z)=-2^{-4}z^{4}G(z)
+\]
+
+which means that $X_c(z)$ will not converge for $z=\infty$ nor for any value of $z$ for which $G(z)$ does not converge. Using the Z-transform pairs table we know that the ROC of $g[n]=-2^n\mu[n-1]$ is $|z|<2$. Therefore, the ROC of $X_c(z)$ must be $|z|<2 \cap z\neq \infty \Rightarrow \textrm{ROC} \equiv |z|<2$.
+
+\vspace{1cm}
+
+
+
+
+
+% ****************************************************************
+\textbf{PROBLEM 8:} A signal $x[n]$ has been passed through a causal LTI system given by the following difference equation:
+
+\[
+y[n]-y[n-1]+\frac{1}{4}y[n-2]=2x[n]-2x[n-1]-\frac{11}{4}x[n-2]+3x[n-3]-\frac{3}{4}x[n-4]
+\]
+
+Find the impulse response of the system (4 points). Is the system stable (1 point)? Could $x[n]$ by recovered from $y[n]$ using a realizable filter (1 point)?
+
+\vspace{1cm}
+% ****************************************************************
+\textbf{SOLUTION:}
+
+Using the shifting property of the Z-transform we easily obtain that:
+
+\begin{equation}\label{hz}
+H(z)=\frac{Y(z)}{X(z)}=\frac{2-2z^{-1}-\frac{11}{4}z^{-2}+3z^{-3}-\frac{3}{4}z^{-4}}{1-z^{-1}+\frac{1}{4}z^{-2}}
+\end{equation}
+
+Clearly, we cannot invert $H(z)$ directly because the numerator does not look anything like $(1-\alpha z^{-1})$ or $(1-\alpha z^{-1})^2$. Therefore a valid approach would be to use long division and subsequently the method of the residuals to express $H(z)$ as a linear combination of powers of $z$ and terms having as denominator either $(1-\alpha z^{-1})$ or $(1-\alpha z^{-1})^2$. We will explore this approach later. 
+
+However, because the denominator of our fractional Z-transform is of order 2 it is worth checking if its two roots are identical (i.e. if we have a double pole), which would make the denominator of $H(z)$ become $(1-\alpha z^{-1})^2$ with $\alpha$ equal to the value of the double pole. Then $H(z)$ would be directly invertible using the shifting property of the Z-transform. To explore this possibility, we start by finding the poles of $H(z)$, that is, the roots of the polynomial $1-z^{-1}+\frac{1}{4}z^{-2}$. To do this we make the variable change $x=z^{-1}$ and solve:
+
+\[
+1-x+\frac{1}{4}x^{2}=0
+\]
+
+obtaining the solutions $x_1=x_2=2$. Reversing the variable change we obtain the roots of our polynomial in $z^{-1}$ are $z_1=z_2=\frac{1}{x1}=\frac{1}{2}$. So we have obtained that $H(z)$ effectively has a double pole at $z=\frac{1}{2}$ and therefore we can write $H(z)$ as:
+
+\begin{equation}\label{eq:hz}
+H(z)=\frac{Y(z)}{X(z)}=\frac{2-2z^{-1}-\frac{11}{4}z^{-2}+3z^{-3}-\frac{3}{4}z^{-4}}{(1-\frac{1}{2}z^{-1})^2} \qquad \textrm{ROC}\equiv |z|>\frac{1}{2}
+\end{equation}
+
+Notice that we know that the ROC of $H(z)$ is $|z|>\frac{1}{2}$ because it is said in the problem description that the system is causal. From here we can already use the table of Z-transform pairs and the shifting property of the Z-transform to obtain an expression of $h[n]$. Recall from the table of Z-transform pairs:
+
+\begin{equation}
+g[n] = n\left(\frac{1}{2}\right)^n\mu[n] \Rightarrow G(z)=\frac{\frac{1}{2}z^{-1}}{(1-\frac{1}{2}z^{-1})^2}
+\end{equation}
+
+Clearly we can write the expression of $H(z)$ in Eq.~\ref{eq:hz} as:
+
+
+\[
+H(z)=4zG(z)-4G(z)-\frac{11}{2}z^{-1}G(z)+6z^{-2}G(z)-\frac{3}{2}z^{-3}G(z)
+\]
+
+And therefore:
+
+\begin{equation}\label{eq:hn1}
+\begin{array}{lll}
+h[n]&=&4(n+1)\frac{1}{2}^{(n+1)}\mu[n+1]-4n\left(\frac{1}{2}\right)^n\mu[n]-\frac{11}{2}(n-1)\left(\frac{1}{2}\right)^{(n-1)}\mu[n-1]\\
+&&+6(n-2)\left(\frac{1}{2}\right)^{(n-2)}\mu[n-2]-\frac{3}{2}(n-3)\left(\frac{1}{2}\right)^{(n-3)}\mu[n-3]
+\end{array}
+\end{equation}
+
+%\emph{Reaching Eq.~\ref{eq:hn1} or an equivalent one was granted 4 points}.
+
+Although this will not be required in the exam, one can operate a bit more in order to express Eq.~\ref{eq:hn1} in this more compact form:
+
+\begin{equation}\label{final}
+h[n]=2\delta[n]-6\delta[n-2]+(1-n)\left(\frac{1}{2}\right)^n\mu[n-3]
+\end{equation}
+
+There is an alternative way of reaching the final solution. Because the numerator of $H(z)$ in Eq.~\ref{hz} is not of lower degree than the denominator we could have used long-division to express $H(z)$ as:
+
+\begin{equation}\label{eq:zeros}
+H(z)=1-3z^{-2} + \frac{1-z^{-1}}{\left(1-\frac{1}{2}z^{-1}\right)^2}
+\end{equation}
+
+Then we can express $H(z)$ as:
+
+\[
+H(z)=1-3z^{-2} + 2zG(z)-2G(z)
+\]
+
+with $G(z)=\frac{\frac{1}{2}z^{-1}}{(1-\frac{1}{2}z^{-1})^2}$. Thus the inverse Z-transform will be:
+
+\begin{equation}
+h[n]=\delta[n]-3\delta[n-2]+2\left(\frac{1}{2}\right)^{(n+1)}\mu[n+1]-2\left(\frac{1}{2}\right)^{n}\mu[n]
+\end{equation}
+
+which, operating a bit can be rewriten exactly as in Eq.~\ref{final}.
+
+Is the system stable?
+
+There are two alternative ways of anwering this question:
+\begin{itemize}
+\item Yes because the ROC of $H(z)$ ($|z|>\frac{1}{2}$) includes the unit circle.
+\item Yes because the system is causal and all the poles of the system function are inside the unit circle.
+\end{itemize}
+
+%\emph{Justifying properly your answer: 1 point}
+
+Could $x[n]$ be recovered from $y[n]$ using a realizable filter?
+
+We could recover $x[n]$ from $y[n]$ by passing $y[n]$ through a filter having as system function $H^{-1}(z)=\frac{1}{H(z)}$. Therefore, what they are asking here is whether the system $H^{-1}(z)$ is realizable, that is whether it is causal and stable. 
+
+The zeros of $H(z)$ become poles in $\frac{1}{H(z)}$. From Eq.~\ref{eq:zeros} we can see that $H(z)$ has a double zero at $z=0$ and a zero at $z=1$. Therefore, $H^{-1}(z)$ has a double pole at $z=0$ and a pole at $z=1$. Because the pole at $z=1$ is not stricly inside the unit circle, the system $H^{-1}(z)$ will be unstable. Thus, $x[n]$ cannot be recovered from $y[n]$ using a realizable filter.
+
+%\emph{Justifying properly your answer: 1 point}
+
+
+
+
+
+
+
+
+\end{document}
