@@ -6,8 +6,8 @@ Exercises for the course Introductory Digital Signal Processing, Tampere Univers
 These exercises were given to students on year 2009. The solutions to the exercises are also included 
 in this repository. Such solutions were publicly available on the course web-page and that is why 
 I don't see any problem in making them even more widely available. As far as I know I am the sole 
-author of all the materials in this repository so I am the only responsible for any typos or mistakes. 
-If you find any, please let [me](mailto:g@germangh.com) know!
+author of all the materials in this repository. That also means that I am the only responsible for any
+ typos or mistakes. If you find any, please let [me](mailto:g@germangh.com) know!
 
 The official course textbooks:
 
